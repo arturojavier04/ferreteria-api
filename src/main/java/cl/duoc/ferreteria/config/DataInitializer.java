@@ -1,3 +1,4 @@
+
 package cl.duoc.ferreteria.config;
 
 import cl.duoc.ferreteria.model.Categoria;
@@ -24,15 +25,24 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (categoriaRepository.count() == 0 && productoRepository.count() == 0) {
-            Categoria herramientas = categoriaRepository.save(
-                    new Categoria("Herramientas", "Herramientas manuales y eléctricas para construcción y hogar"));
-            Categoria construccion = categoriaRepository.save(
-                    new Categoria("Materiales de Construcción", "Cemento, áridos, adhesivos y obra gruesa"));
-            Categoria electricidad = categoriaRepository.save(
-                    new Categoria("Electricidad e Iluminación", "Cables, interruptores, tableros y luminarias LED"));
-            Categoria gasfiteria = categoriaRepository.save(
-                    new Categoria("Gasfitería", "Tuberías PVC, llaves, grifería y conexiones hidráulicas"));
+
+        Categoria herramientas = obtenerOCrearCategoria(
+                "Herramientas",
+                "Herramientas manuales y eléctricas para construcción y hogar");
+
+        Categoria construccion = obtenerOCrearCategoria(
+                "Materiales de Construcción",
+                "Cemento, áridos, adhesivos y obra gruesa");
+
+        Categoria electricidad = obtenerOCrearCategoria(
+                "Electricidad e Iluminación",
+                "Cables, interruptores, tableros y luminarias LED");
+
+        Categoria gasfiteria = obtenerOCrearCategoria(
+                "Gasfitería",
+                "Tuberías PVC, llaves, grifería y conexiones hidráulicas");
+
+        if (productoRepository.count() == 0) {
 
             List<Producto> productos = List.of(
                     crearProducto("Taladro Percutor Inalámbrico 20V", herramientas,
@@ -62,6 +72,12 @@ public class DataInitializer implements CommandLineRunner {
 
             productoRepository.saveAll(productos);
         }
+    }
+
+    private Categoria obtenerOCrearCategoria(String nombre, String descripcion) {
+        return categoriaRepository.findByNombreIgnoreCase(nombre)
+                .orElseGet(() -> categoriaRepository.save(
+                        new Categoria(nombre, descripcion)));
     }
 
     private Producto crearProducto(String nombre, Categoria categoria, String descripcion,

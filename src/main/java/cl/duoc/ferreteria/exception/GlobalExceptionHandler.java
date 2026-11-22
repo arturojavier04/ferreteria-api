@@ -3,9 +3,6 @@ package cl.duoc.ferreteria.exception;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
-import main.java.cl.duoc.ferreteria.exception.StockInsuficienteException;
-
 import java.util.Map;
 
 @RestControllerAdvice
@@ -33,7 +30,7 @@ public class GlobalExceptionHandler {
         }
 
     @ExceptionHandler(StockInsuficienteException.class)
-    public ResponseEntity> stockInsuficiente(StockInsuficienteException e) {
+    public ResponseEntity<Map<String, String>> stockInsuficiente(StockInsuficienteException e) {
         return ResponseEntity.badRequest()
                 .body(Map.of("mensaje", e.getMessage(), "error", e.getMessage()));
     }
