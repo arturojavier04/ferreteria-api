@@ -30,10 +30,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
 
+                        
                         // Catálogo público de productos y categorías
-                        .requestMatchers(HttpMethod.GET, "/api/v1/productos/**", "/api/v1/categorias/**").permitAll()
-                        .requestMatchers("/api/v1/productos/**", "/api/v1/categorias/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,
+                                 "/api/productos/**", "/api/categorias/**").permitAll()
 
+                        // Administración de productos y categorías
+                        .requestMatchers(
+                                "/api/productos/**", "/api/categorias/**").hasRole("ADMIN")
                         // Compras y boletas
                         .requestMatchers(HttpMethod.POST, "/api/v1/boletas/**").hasAnyRole("CLIENTE", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/boletas/**")
